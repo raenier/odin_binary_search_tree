@@ -43,6 +43,42 @@ class Tree
     end
   end
 
+  def delete(value, node = root)
+    return node if node.nil?
+
+    if value < node.value
+      node.left = delete(value, node.left)
+      return node
+    elsif value > node.value
+      node.right = delete(value, node.right)
+      return node
+    else
+      #if key is found
+      if node.left.nil?
+        # accounts child on right and also if leaf
+        node.right
+      elsif node.right.nil?
+        # accounts child on left
+        node.left
+      else
+        # if successor has two children
+        # find min value on right part to be successor
+        successor = min_value_node(node.right)
+        # copy successors value to node value
+        node.value = successor.value
+        # recursively delete successor
+        node.right = delete(successor.value, node.right)
+        return node
+      end
+    end
+  end
+
+  def min_value_node(node = root)
+    return node if node.left.nil?
+
+    min_value_node(node.left)
+  end
+
   def find(value, node = root)
     return 'Not Found' if node.nil?
     return node if value == node.value
