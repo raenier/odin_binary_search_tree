@@ -43,6 +43,17 @@ class Tree
     end
   end
 
+  def find(value, node = root)
+    return 'Not Found' if node.nil?
+    return node if value == node.value
+
+    if value < node.value
+      find(value, node.left)
+    else
+      find(value, node.right)
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
