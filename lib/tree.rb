@@ -123,6 +123,30 @@ class Tree
     recursive_level_order(queue, accumulated_results, &block)
   end
 
+  def preorder(node = root, accumulated_results = [], &block)
+    return accumulated_results if node.nil?
+
+    accumulated_results << (block_given? ? yield(node.value) : node.value)
+    acc = preorder(node.left, accumulated_results, &block)
+    preorder(node.right, acc, &block)
+  end
+
+  def inorder(node = root, accumulated_results = [], &block)
+    return accumulated_results if node.nil?
+
+    acc = inorder(node.left, accumulated_results, &block)
+    accumulated_results << (block_given? ? yield(node.value) : node.value)
+    inorder(node.right, acc, &block)
+  end
+
+  def postorder(node = root, accumulated_results = [], &block)
+    return accumulated_results if node.nil?
+
+    acc = postorder(node.left, accumulated_results, &block)
+    postorder(node.right, acc, &block)
+    accumulated_results << (block_given? ? yield(node.value) : node.value)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
