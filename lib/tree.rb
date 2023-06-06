@@ -90,6 +90,39 @@ class Tree
     end
   end
 
+  def level_order
+    queue = [root]
+    accumulated_results = []
+
+    until queue.empty?
+      node = queue.shift
+
+      result = block_given? ? yield(node.value) : node.value
+      accumulated_results << result
+
+      queue << node.left unless node.left.nil?
+      queue << node.right unless node.right.nil?
+    end
+
+    return accumulated_results
+  end
+
+  def recursive_level_order(queue = [root], accumulated_results = [], &block)
+    # level order traversal using recursion
+    return accumulated_results if queue.empty?
+
+    # yield the node
+    node = queue.shift
+    accumulated_results << (block_given? ? yield(node.value) : node.value)
+
+    # enqueue the children
+    queue << node.left unless node.left.nil?
+    queue << node.right unless node.right.nil?
+
+    #recursive call to function with updated queue and results
+    recursive_level_order(queue, accumulated_results, &block)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
