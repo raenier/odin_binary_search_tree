@@ -166,6 +166,11 @@ class Tree
     [1, 0, -1].include? height_difference
   end
 
+  def rebalance(node = root)
+    new_sorted_array = inorder
+    build_tree(new_sorted_array)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
