@@ -147,6 +147,18 @@ class Tree
     accumulated_results << (block_given? ? yield(node.value) : node.value)
   end
 
+  def height(node = root)
+    return 0 if node.nil?
+
+    left_height = height(node.left)
+    right_height = height(node.right)
+    if left_height > right_height
+      return 1 + left_height
+    else
+      return 1 + right_height
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
