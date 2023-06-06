@@ -9,10 +9,10 @@ class Tree
   end
 
   def build_tree(arr = sorted_input)
-    #base case
-    return nil  if arr.empty?
+    # base case
+    return nil if arr.empty?
 
-    middle_index = arr.size/2
+    middle_index = arr.size / 2
     root_part = arr.slice(middle_index, 1)
     left_part = arr.slice(0, middle_index)
     right_part = arr.slice(middle_index + 1, arr.size)
@@ -20,12 +20,12 @@ class Tree
     # create the node, from the middle array
     new_node = Node.new(root_part.first)
 
-    #recursively build trees on left and right part of array
+    # recursively build trees on left and right part of array
     new_node.left = build_tree(left_part)
     new_node.right = build_tree(right_part)
 
-    #return node,assign it to root
-    #the last call to this is the first root of the recursion
+    # return node,assign it to root
+    # the last call to this is the first root of the recursion
     self.root = new_node
   end
 
@@ -48,28 +48,27 @@ class Tree
 
     if value < node.value
       node.left = delete(value, node.left)
-      return node
+      node
     elsif value > node.value
       node.right = delete(value, node.right)
-      return node
+      node
+
+    # if value is found
+    elsif node.left.nil?
+      # accounts child on right and also if leaf
+      node.right
+    elsif node.right.nil?
+      # accounts child on left
+      node.left
     else
-      #if key is found
-      if node.left.nil?
-        # accounts child on right and also if leaf
-        node.right
-      elsif node.right.nil?
-        # accounts child on left
-        node.left
-      else
-        # if successor has two children
-        # find min value on right part to be successor
-        successor = min_value_node(node.right)
-        # copy successors value to node value
-        node.value = successor.value
-        # recursively delete successor
-        node.right = delete(successor.value, node.right)
-        return node
-      end
+      # if successor has two children
+      # find min value on right part to be successor
+      successor = min_value_node(node.right)
+      # copy successors value to node value
+      node.value = successor.value
+      # recursively delete successor
+      node.right = delete(successor.value, node.right)
+      node
     end
   end
 
@@ -104,7 +103,7 @@ class Tree
       queue << node.right unless node.right.nil?
     end
 
-    return accumulated_results
+    accumulated_results
   end
 
   def recursive_level_order(queue = [root], accumulated_results = [], &block)
@@ -119,7 +118,7 @@ class Tree
     queue << node.left unless node.left.nil?
     queue << node.right unless node.right.nil?
 
-    #recursive call to function with updated queue and results
+    # recursive call to function with updated queue and results
     recursive_level_order(queue, accumulated_results, &block)
   end
 
@@ -153,9 +152,9 @@ class Tree
     left_height = height(node.left)
     right_height = height(node.right)
     if left_height > right_height
-      return 1 + left_height
+      1 + left_height
     else
-      return 1 + right_height
+      1 + right_height
     end
   end
 
@@ -166,7 +165,7 @@ class Tree
     [1, 0, -1].include? height_difference
   end
 
-  def rebalance(node = root)
+  def rebalance(_node = root)
     new_sorted_array = inorder
     build_tree(new_sorted_array)
   end

@@ -9,7 +9,7 @@ class Node
     @right = nil
   end
 
-  def <=> (other)
-    self.value <=> other.value
+  def <=>(other)
+    value <=> other.value
   end
 end
